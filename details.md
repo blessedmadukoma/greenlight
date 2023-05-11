@@ -13,6 +13,19 @@
    - 2.3: API Endpoints and RESTful Routing
      1. installed and set [`httprouter`](github.com/julienschmidt/httprouter@v1.3.0) for routing
 
-3. Chapter 3: Sending JSON Responses
-   - 3.0: Sending JSON Responses
-     1. updated API handlers to return JSON responses instead of plain text
+3. Chapter 3: Sending JSON (Javascript Object Notation) Responses
+   - 3.1: Fixed-Format JSON
+     1. updated healthcheckHandler to send JSON response
+   - 3.2 JSON Encoding
+     1. updated `healthcheckHandler` to use the `json.Marshal()` function to encode the JSON
+     2. set a new function to `writeJSON` in `helpers.go`
+   - 3.3 Encoding structs
+     1. defined a custom `Movie` struct in `internal/data` package.
+     2. updated `showMovieHandler` by adding the `Movie` struct
+     3. set keys in the `Movie` struct
+     4. hid the `CreatedAt` field in the JSON struct using the hyphen (-) which makes the output for this field not to show, set the `Year`, `Runtime`, and `Genre` fields to omitempty which makes the field not to show if it is empty.
+   - 3.4 Formatting and Enveloping Responses
+     1. changed from `json.Marshal()` to `MarshalIndent()` for project formatting. (Although you take a performance hit, so use only when the data is not resource intensive).
+     2. Enveloped our response by showing a JSON key `movie` when rendering the value. Updated the data value in `writeJSON` to be a type of envelope (a map[string]interface{}). Updated `showMovieHandler` to create an instance of the envelope map containing the movie data. Updated the `healthcheckHandler` function to use the envelope map, and removed the `data` variable. 
+   - 3.5 Advanced JSON Customization
+     1. 
