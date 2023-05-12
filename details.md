@@ -28,4 +28,10 @@
      1. changed from `json.Marshal()` to `MarshalIndent()` for project formatting. (Although you take a performance hit, so use only when the data is not resource intensive).
      2. Enveloped our response by showing a JSON key `movie` when rendering the value. Updated the data value in `writeJSON` to be a type of envelope (a map[string]interface{}). Updated `showMovieHandler` to create an instance of the envelope map containing the movie data. Updated the `healthcheckHandler` function to use the envelope map, and removed the `data` variable. 
    - 3.5 Advanced JSON Customization
-     1. 
+     1. created `internal/data/runtime.go` to set the runtime field in the Movie struct to be a string i.e. 102 mins
+     2. changed the datatype of runtime in the movie struct from `int` to `Runtime`
+   - 3.6 Sending Error Messages
+     1. created `errors.go` for managing errors.
+     2. replaced all http.notFound(), http.Server() errors with the new error handling methods.
+     3. Routing errors: errors from `httprouter` router.
+     4. Updated `routes.go` by setting a custom error handler for the routes
