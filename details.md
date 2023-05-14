@@ -35,3 +35,22 @@
      2. replaced all http.notFound(), http.Server() errors with the new error handling methods.
      3. Routing errors: errors from `httprouter` router.
      4. Updated `routes.go` by setting a custom error handler for the routes
+
+4. Parsing JSON Requests
+   - 4.1: JSON Decoding
+     1. updated `createMovieHandler` by adding struct to hold user input
+   - 4.2: Managing Bad Requests
+     1. triage the Decode error to have a better, cleaner error returned:
+        - created `readJSON` to decode the JSON from the request body, triage the errors and replace them with our custom messages.
+        - updated `createMovieHandler` by adding the `readJSON` method
+     2. updated `createMovieHandler` by adding a newly created method `badRequestResponse` to return 400 error code.
+   - 4.3: Restricting Inputs
+     1. set limit for the size of the request body in  `readJSON`
+     2. set `DisallowUnknownFields` to disallow unknown fields in the request body
+   - 4.4: Custom JSON Decoding
+     1. updated input struct in `createMovieHandler` to use the `data.Runtime` type for the Runtime field
+     2. added `UnmarshalJSON` method to `runtime.go` which will convert the runtime number to int32, and assign to the `Runtime` value itself
+   - 4.5: Validating JSON input
+     1. defined a custom `Validator` package which contains a map of errors. Methods include: `Check()` which conditionally adds errors to the map, `Valid()` which returns wether the errors map is empty or not. Other functions include `In()`, `Matches()`, and `Unique()` to perform specific validation checks.
+     2. added `failedValidationResponse` to return `status unprocessable entity (error 422)` to `errors.go` 
+     3. updated `createMovieHandler` by adding the validation pacakage.

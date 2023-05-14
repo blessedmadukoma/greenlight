@@ -2,10 +2,12 @@ package main
 
 import "net/http"
 
+// logError is a helper that for logging errors
 func (app *application) logError(r *http.Request, err error) {
 	app.logger.Println(err)
 }
 
+// errorResponse is a helper to send JSON-formatted error messages to the client
 func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, status int, message interface{}) {
 	env := envelope{"error": message}
 
@@ -16,6 +18,7 @@ func (app *application) errorResponse(w http.ResponseWriter, r *http.Request, st
 	}
 }
 
+// serverErrorResponse is a helper to send a 500 Internal Server Error response
 func (app *application) serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
 	app.logError(r, err)
 
@@ -23,12 +26,24 @@ func (app *application) serverErrorResponse(w http.ResponseWriter, r *http.Reque
 	app.errorResponse(w, r, http.StatusInternalServerError, message)
 }
 
+// notFoundResponse is a helper to send a 404 Not Found response
 func (app *application) notFoundResponse(w http.ResponseWriter, r *http.Request) {
 	message := "the requested resource could not be found"
 	app.errorResponse(w, r, http.StatusNotFound, message)
 }
 
+// methodNotAllowedResponse is a helper to send a 405 Method Not Allowed response
 func (app *application) methodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
 	message := "the requested method is not allowed"
 	app.errorResponse(w, r, http.StatusMethodNotAllowed, message)
+}
+
+// badRequestResponse is a helper to send a 400 Bad Request response
+func (app *application) badRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
+	app.errorResponse(w, r, http.StatusBadRequest, err.Error())
+}
+
+// failedValidationResponse is a helper to send a 422 Unprocessable Entity response if validation fails
+func (app *application) failedValidationResponse(w http.ResponseWriter, r *http.Request, errors map[string]string) {
+	app.errorResponse(w, r, http.StatusUnprocessableEntity, errors)
 }
