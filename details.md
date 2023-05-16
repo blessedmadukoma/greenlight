@@ -54,3 +54,15 @@
      1. defined a custom `Validator` package which contains a map of errors. Methods include: `Check()` which conditionally adds errors to the map, `Valid()` which returns wether the errors map is empty or not. Other functions include `In()`, `Matches()`, and `Unique()` to perform specific validation checks.
      2. added `failedValidationResponse` to return `status unprocessable entity (error 422)` to `errors.go` 
      3. updated `createMovieHandler` by adding the validation pacakage.
+
+5. Database Setup and Configuration
+   - 5.1: Setting up PostgreSQL
+     1. installed postgres
+     2. used `psql` command to create a new database called `greenlight`: `CREATE DATABASE greenlight`
+     3. create user `greenlight` without superuser permissions, with a password-based authentication: `CREATE ROLE greenlight WITH LOGIN PASSWORD 'greenlight';`
+     5. create a Postgres extension `citext` which adds case-insensitive character string type: `CREATE EXTENSION IF NOT EXISTS citext;`
+     6. Exited: `exit` and connected as the `greenlight user`: `psql --host=localhost --dbname=greenlight --username=greenlight`
+     7. checked current user: `SELECT current_user;`, check the location of the `postgresql.conf`: `sudo -u postgres psql -c 'SHOW config_file;'`
+   - 5.2: Connecting to PostgreSQL
+     1. installed postgres [`lib/pq`](github.com/lib/pq) driver
+     2. added `openDB` function to connect to the PostgreSQL database
