@@ -68,4 +68,16 @@
      2. added `openDB` function to connect to the PostgreSQL database
      3. added `.env` for connecting to db using the [Godotenv](github.com/joho/godotenv)
    - 5.3: Configuring the database connection pool
-     1.  added `maxOpenConns`, `maxIdleConns`, `maxIdleTime` to the config struct
+     1.  added `maxOpenConns`, `maxIdleConns`, `maxIdleTime` to the config struct, set the values to 25, 25 and 15 minutes respectively in `openDB` function
+
+6. SQL Migrations
+   - 6.1: An overview of SQL Migrations
+     1. installed the golang-`migrate` tool using brew i.e. `brew install golang-migrate`
+   - 6.2: Working with SQL Migrations
+     1. created new migration file for movies table using the `migrate` command: `migrate create -seq -ext=.sql -dir=./migrations create_movies_table`
+     2. added the create table movies sql query to the `.up.sql` migration file and drop table movies sql query to the `.down.sql` migration file
+     3. created new migration file for containing `CHECK` constraints to ensure business rules at the db level: `migrate create -seq -ext=.sql -dir=./migrations add_movies_check_constraints`. Added the corresponding queries to the `.up.sql` and `.down.sql` files.
+     4. added `Makefile` to perform the `migrateup`
+
+7. CRUD Operations
+   - 7.1: Setting up the Movie Model
