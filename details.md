@@ -66,3 +66,6 @@
    - 5.2: Connecting to PostgreSQL
      1. installed postgres [`lib/pq`](github.com/lib/pq) driver
      2. added `openDB` function to connect to the PostgreSQL database
+     3. added `.env` for connecting to db using the [Godotenv](github.com/joho/godotenv)
+   - 5.3: Configuring the database connection pool
+     1.  added `maxOpenConns`, `maxIdleConns`, `maxIdleTime` to the config struct
