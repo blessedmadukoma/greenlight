@@ -28,16 +28,16 @@ func (v *Validator) AddError(key, message string) {
 }
 
 // Check checks a field for a specific condition and adds an error to the map if the condition fails
-func (v *Validator) Check(condition bool, key, message string) {
-	if condition {
+func (v *Validator) Check(ok bool, key, message string) {
+	if !ok {
 		v.AddError(key, message)
 	}
 }
 
 // In checks if a string value is in a list of strings
 func In(value string, list ...string) bool {
-	for _, item := range list {
-		if item == value {
+	for i := range list {
+		if value == list[i] {
 			return true
 		}
 	}

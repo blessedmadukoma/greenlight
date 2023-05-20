@@ -81,3 +81,11 @@
 
 7. CRUD Operations
    - 7.1: Setting up the Movie Model
+     1. Set up the `model` or `data access/storage` layer which encapsulates all the code for reading and writing the movie data to and from Postgres db.
+     2. updated `internal\data\movies.go` by adding the `MovieModel` struct, and CRUD methods for manipulation 
+     3. wrapped `MovieModel` in the `Models` struct in a new file `internal/data/models.go`. This is optional but it gives a 'single container' which can hold and represent all the database models as the application grows.
+     4. updated `main.go` by adding the models field to `application` struct.
+     5. Note, with a few tweak, mocking the database is easy.
+   - 7.2: Creating a New Movie
+     1. updated `Insert` method in the `internal/data/movies.go` by adding the SQL query and execution statement
+     2. updated `createMovieHandler` in `cmd/api/movies.go` by adding the updated `Insert` method

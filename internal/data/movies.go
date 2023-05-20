@@ -1,9 +1,12 @@
 package data
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/blessedmadukoma/greenlight/internal/validator"
+
+	"github.com/lib/pq"
 )
 
 type Movie struct {
@@ -28,4 +31,33 @@ func ValidateMovie(v *validator.Validator, movie *Movie) {
 	v.Check(len(movie.Genres) >= 1, "genres", "must contain at least 1 genre")
 	v.Check(len(movie.Genres) <= 5, "genres", "must not contain more than 5 genres")
 	v.Check(validator.Unique(movie.Genres), "genres", "must not contain duplicate values")
+}
+
+// MovieModel defines the methods for interacting with movies data.
+type MovieModel struct {
+	DB *sql.DB
+}
+
+// Insert will insert a new movie into the database.
+func (m MovieModel) Insert(movie *Movie) error {
+	query := `INSERT INTO movies (title, year, runtime, genres) VALUES ($1, $2, $3, $4) RETURNING id, created_at, version`
+
+	args := []interface{}{movie.Title, movie.Year, movie.Runtime, pq.Array(movie.Genres)}
+
+	return m.DB.QueryRow(query, args...).Scan(&movie.ID, &movie.CreatedAt, &movie.Version)
+}
+
+// Get will return the movie with the provided ID. If no matching movie is
+func (m MovieModel) Get(id int64) (*Movie, error) {
+	return nil, nil
+}
+
+// Update will update the movie with the provided ID and information.
+func (m MovieModel) Update(movie *Movie) error {
+	return nil
+}
+
+// Delete will delete a movie from the database.
+func (m MovieModel) Delete(id int64) error {
+	return nil
 }
