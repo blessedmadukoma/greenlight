@@ -89,3 +89,14 @@
    - 7.2: Creating a New Movie
      1. updated `Insert` method in the `internal/data/movies.go` by adding the SQL query and execution statement
      2. updated `createMovieHandler` in `cmd/api/movies.go` by adding the updated `Insert` method
+   - 7.3: Fetching a movie
+     1. updated the `Get` method by adding the SQL query and execution statement.
+     2. updated `showMovieHandler` in `cmd/api/movies.go` by adding the updated `Insert` method
+   - 7.4: Updating a movie
+     1. added the rotutes for updating the movie
+     2. updated the `Update` method by adding the SQL query and execution statement.
+     3. created `updateMovieHandler` in `cmd/api/movies.go` and added the updated `Update` method
+   - 7.5: Deleting a movie
+     1. added the rotutes for deleting the movie
+     2. updated the `Delete` method by adding the SQL query and execution statement.
+     3. created `deleteMovieHandler` in `cmd/api/movies.go` and added the updated `Update` method
