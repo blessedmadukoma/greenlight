@@ -100,3 +100,7 @@
      1. added the rotutes for deleting the movie
      2. updated the `Delete` method by adding the SQL query and execution statement.
      3. created `deleteMovieHandler` in `cmd/api/movies.go` and added the updated `Update` method
+
+8. Advanced CRUD Operations
+   - 8.1: Handling Partial Updates
+     1. 
