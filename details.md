@@ -103,4 +103,14 @@
 
 8. Advanced CRUD Operations
    - 8.1: Handling Partial Updates
+     1. changed the datatypes of the `input` struct in `updateMovieHandler` method in the `cmd/api/movies.go` file from pass-by-values to pointers (pass-by-reference).
+     2. updated the route method from `PUT` to `PATCH` because it is best to use Patch for partial updates on a resource, rather than Put (which is intended for replacing a resource in full)
+   - 8.2: Optimistic Concurrency Control
+     1. Prevent data race using optimistic locking vs pessimistic locking
+     2. created custom `ErrEditConflict` error in case of a conflict
+     3. updated `Update` method in `internal/data/movies.go`
+     4. added `editConflictResponse` method to `cmd/api/errors.go`
+     5. added `editConflictResponse` to `updateMovieHandler`
+     6. added the `version` header check in `updateMovieHandler` which allows the sent request to verify that the movie version in the database matches the expected version specified in the header.
+   - 8.3: managing SQL Query Timeouts
      1. 
