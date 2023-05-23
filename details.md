@@ -114,4 +114,9 @@
      6. added the `version` header check in `updateMovieHandler` which allows the sent request to verify that the movie version in the database matches the expected version specified in the header.
    - 8.3: managing SQL Query Timeouts
      1. added context to `Get`, `Update`, `Insert` and `Delete` methods which returns error for time out
-     2. 
+
+9. Filtering, Sorting and Pagination
+   - 9.1: Parsing Query String Parameters
+     1. created helper functions `readString()`, `readInt()` and `readCSV()` to extract and parse values from query string or return a default 'fallback' value if necessary.
+     2. added the new route and updated the code for `listMoviesHandler` to get all movies 
+     3. created `filter.go` to handle page filters, moved `PageSize, Page and Sort` fields to `Filters` struct and added `Filters` struct as field to the `input` struct in the `listMoviesHandler` method
