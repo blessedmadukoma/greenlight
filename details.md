@@ -113,4 +113,5 @@
      5. added `editConflictResponse` to `updateMovieHandler`
      6. added the `version` header check in `updateMovieHandler` which allows the sent request to verify that the movie version in the database matches the expected version specified in the header.
    - 8.3: managing SQL Query Timeouts
-     1. 
+     1. added context to `Get`, `Update`, `Insert` and `Delete` methods which returns error for time out
+     2. 
