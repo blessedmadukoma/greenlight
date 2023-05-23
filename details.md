@@ -120,3 +120,6 @@
      1. created helper functions `readString()`, `readInt()` and `readCSV()` to extract and parse values from query string or return a default 'fallback' value if necessary.
      2. added the new route and updated the code for `listMoviesHandler` to get all movies 
      3. created `filter.go` to handle page filters, moved `PageSize, Page and Sort` fields to `Filters` struct and added `Filters` struct as field to the `input` struct in the `listMoviesHandler` method
+   - 9.2: Validating Query String Parameters
+     1. added `ValidateFilters` function to certify that the page value is between 1 and 10,000,000; the page_size value is between 1 and 100; the sort parameter contains either "id", "title", "year", "runtime", "-id", "-title", "-year" or "-runtime", where those with `-` infront meaning descending order.
+     2. updated `listMoviesHandler` by setting the supported values in the `SortSafelist` field.
