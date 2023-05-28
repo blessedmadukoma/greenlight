@@ -126,3 +126,6 @@
    - 9.3: Listing Data
      1. created `GetAll()` method to execute db query
      2. updated `listMoviesHandler` by adding `GetAll()`.
+   - 9.4: Filtering Lists
+     1. updated `GetAll()` method by adding filter query string
+     2. 
