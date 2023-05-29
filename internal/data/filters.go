@@ -41,3 +41,13 @@ func (f Filters) sortDirection() string {
 
 	return "ASC"
 }
+
+// limit	returns the LIMIT value for a SQL query based on the page size.
+func (f Filters) limit() int {
+	return f.PageSize
+}
+
+// offset returns the OFFSET value for a SQL query based on the page number and page size.
+func (f Filters) offset() int {
+	return (f.Page - 1) * f.PageSize
+}

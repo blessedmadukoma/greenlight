@@ -148,3 +148,6 @@
      1. client controls the sort order via a query string parameter in the format `sort={-}{field_name}`, where the optional `-` is used to indicate descending order. E.g. `localhost:4000/v1/movies?sort=title`
      2. updated `Filters` struct in `filters.go` by including sortColumn() and sortDirection() helpers to convert query string value (.e. -title) to usable values in our SQL query.
      3. added the newly created method helpers to `internal/data/movies.go`, and updated the SQL query by adding _ORDER BY_ clause.
+   - 9.7: Paginating Lists
+     1. added `limit()` and `offset()` helper methods to Filters struct for calculating the limit and offset (offset = (page - 1) * page_size) values. **Note:** there is a theoretical risk of integer overflow due to the multiplication of two int values together. However, this is mitigated by the validation rules created in the `ValidateFilters()` function, where the maximum values of page_size=100 and page=10000000 (10 million) were enforced. This means the value returned by `offset()` should never come close to overflowing.
+     2. added the created helper methods, and updated the SQL query to the `internal/data/movies.go`
