@@ -151,3 +151,7 @@
    - 9.7: Paginating Lists
      1. added `limit()` and `offset()` helper methods to Filters struct for calculating the limit and offset (offset = (page - 1) * page_size) values. **Note:** there is a theoretical risk of integer overflow due to the multiplication of two int values together. However, this is mitigated by the validation rules created in the `ValidateFilters()` function, where the maximum values of page_size=100 and page=10000000 (10 million) were enforced. This means the value returned by `offset()` should never come close to overflowing.
      2. added the created helper methods, and updated the SQL query to the `internal/data/movies.go`
+   - 9.8: Returning Pagination Metadata
+     1. created `Metadata` struct in `filters.go` to hold the pagination metadata, `calculateMetaData()` function to calculate the appropriate metadata values
+     2. added `count(*) OVER()` to SQL query in `internal/data/movies.go` to count the total number of movies (qualifying rows)
+     3. updated `listMoviesHandler` to accept metadata struct and values
