@@ -143,3 +143,8 @@
          - `plainto_tsquery('simple', $1)` function takes a search value and turns it into a formatted query term that Postgres full-text search can understand. It normailzes the search value (using the 'simple' configuration), strips any special characters and inserts the AND i.e. & operator between the words. Example: search value = "The Club", the query term would be = 'the' & 'club'
          - the `@@` operator is the _matches_ operator. Used to check that the query term matches the lexemes. 
          - A complete list can be found [here](https://www.postgresql.org/docs/9.6/functions-array.html)
+
+   - 9.6: Sorting Lists
+     1. client controls the sort order via a query string parameter in the format `sort={-}{field_name}`, where the optional `-` is used to indicate descending order. E.g. `localhost:4000/v1/movies?sort=title`
+     2. updated `Filters` struct in `filters.go` by including sortColumn() and sortDirection() helpers to convert query string value (.e. -title) to usable values in our SQL query.
+     3. added the newly created method helpers to `internal/data/movies.go`, and updated the SQL query by adding _ORDER BY_ clause.
