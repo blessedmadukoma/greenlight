@@ -155,3 +155,12 @@
      1. created `Metadata` struct in `filters.go` to hold the pagination metadata, `calculateMetaData()` function to calculate the appropriate metadata values
      2. added `count(*) OVER()` to SQL query in `internal/data/movies.go` to count the total number of movies (qualifying rows)
      3. updated `listMoviesHandler` to accept metadata struct and values
+
+10. Structured Logging and Error Handling
+   - 10.1: Structured JSON Log Entries
+     1. Each log entry will be single JSON object containing level, time, message, properties (key/value pairs - optional) and trace (optional) e.g. `{"level":"INFO","time":"2020-12-16T10:53:35Z","message":"starting server","properties":{"addr":":4000","env":"development"}}`
+     2. created a custom logger with structs and helper methods in `jsonlog.go` 
+     3. updated `main.go` to use the newly created `jsonlog.Logger` struct as a field for the logger, updated the logger variable, and log.Print or log.Fatal commands.
+     4. updated `errors.go`, `healthcheck.go` and `movies.go` logger instances.
+   - 10.2: Panic Recovery
+     1. 

@@ -80,7 +80,10 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 		"movie": movie,
 	}, nil)
 	if err != nil {
-		app.logger.Println(err)
+		app.logger.PrintError(err, map[string]string{
+			"request_method": r.Method,
+			"request_url":    r.URL.String(),
+		})
 		app.serverErrorResponse(w, r, err)
 		return
 	}
@@ -164,7 +167,10 @@ func (app *application) updateMovieHandler(w http.ResponseWriter, r *http.Reques
 		"movie": movie,
 	}, nil)
 	if err != nil {
-		app.logger.Println(err)
+		app.logger.PrintError(err, map[string]string{
+			"request_method": r.Method,
+			"request_url":    r.URL.String(),
+		})
 		app.serverErrorResponse(w, r, err)
 		return
 	}
@@ -192,7 +198,10 @@ func (app *application) deleteMovieHandler(w http.ResponseWriter, r *http.Reques
 		"movie": "movie deleted successfully",
 	}, nil)
 	if err != nil {
-		app.logger.Println(err)
+		app.logger.PrintError(err, map[string]string{
+			"request_method": r.Method,
+			"request_url":    r.URL.String(),
+		})
 		app.serverErrorResponse(w, r, err)
 		return
 	}
