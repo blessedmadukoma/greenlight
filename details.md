@@ -163,4 +163,5 @@
      3. updated `main.go` to use the newly created `jsonlog.Logger` struct as a field for the logger, updated the logger variable, and log.Print or log.Fatal commands.
      4. updated `errors.go`, `healthcheck.go` and `movies.go` logger instances.
    - 10.2: Panic Recovery
-     1. 
+     1. created `middleware.go` and added `recoverPanic()` method to recover from a panic.
+     2. Added the `recoverPanic()` method to `routes.go` which returns http.Handler instead of *httprouter.ROuter
