@@ -165,3 +165,16 @@
    - 10.2: Panic Recovery
      1. created `middleware.go` and added `recoverPanic()` method to recover from a panic.
      2. Added the `recoverPanic()` method to `routes.go` which returns http.Handler instead of *httprouter.ROuter
+
+11. Rate Limiting
+   - 11.1: Global Rate Limiting
+     1. installed [rate package](golang.org/x/time/rate@latest)
+     2. How toen-bucket rate limiters work:
+        1. A limiter controls how frequently eventsare allowed to happen. It implements a "token bucket" of size _b_, initially full and refilled at rate _r_ tokens per second.
+        2. In the context of our API application: 
+           - a bucket starting with _b_ tokens.
+           - each time a HTTP request is received, we remove one token from the bucket.
+           - every 1/r seconds, a token is added back to the bucket - up to a maximum of _b_ total tokens.
+           - if we receive a HTTP request and the bucket is empty, return _429 Too Many Requests_ response.
+     3. created `rateLimit()` middleware method which creates a new rate limiter for every request that it subsequently handles.
+     4. updated `errors.go` by adding the `rateLimitExceededResponse()` methods and added the `rateLimit` middleware to `routes.go` 
