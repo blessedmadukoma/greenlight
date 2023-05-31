@@ -187,4 +187,7 @@
         - For subsequent requests, the client's rate limiter is retreived from the map and the request is checked if it's permitted by calling its `Allow()` method.
         - Due to the potential of having multiple goroutines accessing the map concurrently, we need to protect access to the map by using `mutex` to prevent race conditions.
      4. updated `rateLimit()` method to used IP based routing. Also add `last seen` feature to prevent the map from growing indefinitely and taking up resources. <br/>
-     **Note:** This pattern works for the application running on a sing;e machine, if your infrastructure is distributed, you will need an alternative approach. Alternatively, redis can be used to maintain a request count for clients, running on a server which all the application servers can communicate with.
+     **Note:** This pattern works for the application running on a sing;e machine, if your infrastructure is distributed, you will need an alternative approach. Alternatively, redis can be used to maintain a request count for clients, running on a server which all the application servers can communicate with. <br/>
+   - 11.3: Configuring the Rate Limiters
+     1. Make rate limiting values i.e. requests-per-second and burst values) easily configurable so Rate limiting can be turned off if carrying out benchmarks or load testing.
+     2. updated `main.go`, and `rateLimit()` method

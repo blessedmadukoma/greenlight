@@ -5,8 +5,10 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/blessedmadukoma/greenlight/internal/data"
@@ -26,12 +28,38 @@ type config struct {
 		maxIdleConns int
 		maxIdleTime  string
 	}
+	limiter struct {
+		rps     float64
+		burst   int
+		enabled bool
+	}
 }
 
 type application struct {
 	config config
 	logger *jsonlog.Logger
 	models data.Models
+}
+
+// limiValues retreives the values for the rate limiter from the env
+func limitValues() (int, int, bool) {
+
+	rps, err := strconv.Atoi(os.Getenv("LIMITER_RPS"))
+	if err != nil {
+		log.Fatal("Error retrieving rps value:", err)
+	}
+	burst, err := strconv.Atoi(os.Getenv("LIMITER_BURST"))
+	if err != nil {
+		log.Fatal("Error retrieving burst value:", err)
+	}
+	enabled, err := strconv.ParseBool(os.Getenv("LIMITER_ENABLED"))
+	if err != nil {
+		log.Fatal("Error retrieving enabled value:", err)
+	}
+
+	fmt.Println(rps, burst, enabled)
+
+	return rps, burst, enabled
 }
 
 func main() {
@@ -45,6 +73,13 @@ func main() {
 	flag.IntVar(&cfg.db.maxOpenConns, "db-max-open-conns", 25, "PostgreSQL maximum open connections")
 	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "PostgreSQL maximum idle connections")
 	flag.StringVar(&cfg.db.maxIdleTime, "db-max-idle-time", "15m", "PostgreSQL maximum idle time")
+
+	rps, burst, enabled := limitValues()
+
+	// set the values for limiter
+	flag.Float64Var(&cfg.limiter.rps, "limiter-rps", float64(rps), "Rate limiter maximum requests per second")
+	flag.IntVar(&cfg.limiter.burst, "limiter-burst", burst, "Rate limiter maximum burst")
+	flag.BoolVar(&cfg.limiter.enabled, "limiter-enabled", enabled, "Enable rate limiter")
 
 	flag.Parse()
 

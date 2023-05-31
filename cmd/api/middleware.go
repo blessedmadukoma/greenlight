@@ -55,36 +55,42 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 	}()
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ip, _, err := net.SplitHostPort(r.RemoteAddr)
+		// only carry out the rate limiting if enabled
+		if app.config.limiter.enabled {
+			ip, _, err := net.SplitHostPort(r.RemoteAddr)
 
-		if err != nil {
-			app.serverErrorResponse(w, r, err)
-			return
-		}
+			if err != nil {
+				app.serverErrorResponse(w, r, err)
+				return
+			}
 
-		// lock the mutex to prevent concurrent execution
-		mu.Lock()
+			// lock the mutex to prevent concurrent execution
+			mu.Lock()
 
-		// check if the IP exisits in the map, if it doesn't, initialize a new rate limiter and add the IP address and limiter to the map
-		if _, found := clients[ip]; !found {
-			clients[ip] = &client{limiter: rate.NewLimiter(2, 4)}
-		}
+			// check if the IP exisits in the map, if it doesn't, initialize a new rate limiter and add the IP address and limiter to the map
+			if _, found := clients[ip]; !found {
+				clients[ip] = &client{
+					limiter: rate.NewLimiter(rate.Limit(app.config.limiter.rps), app.config.limiter.burst),
+				}
+			}
 
-		// update the client's last seen
-		clients[ip].lastSeen = time.Now()
+			// update the client's last seen
+			clients[ip].lastSeen = time.Now()
 
-		// if the request is not allowed, unlock the mutex and send 429 error
-		if !clients[ip].limiter.Allow() {
-			// fmt.Println("IP:", ip, "\nLast seen:", clients[ip].lastSeen.String(), "\nTokens:", clients[ip].limiter.Tokens(), "\n...")
+			// if the request is not allowed, unlock the mutex and send 429 error
+			if !clients[ip].limiter.Allow() {
+				// fmt.Println("IP:", ip, "\nLast seen:", clients[ip].lastSeen.String(), "\nTokens:", clients[ip].limiter.Tokens(), "\n...")
+				mu.Unlock()
+				app.rateLimitExceededResponse(w, r)
+				return
+			}
+
+			// Very Important: unlock the mutex before calling the next handler in the chain.
 			mu.Unlock()
-			app.rateLimitExceededResponse(w, r)
-			return
 		}
-
-		// Very Important: unlock the mutex before calling the next handler in the chain.
-		mu.Unlock()
 
 		next.ServeHTTP(w, r)
+
 	})
 }
 
