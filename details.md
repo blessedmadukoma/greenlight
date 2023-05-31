@@ -168,13 +168,23 @@
 
 11. Rate Limiting
    - 11.1: Global Rate Limiting
-     1. installed [rate package](golang.org/x/time/rate@latest)
-     2. How toen-bucket rate limiters work:
+     1. Global rate limiting is useful for enforcing a strict limit on the total rate of requests to the API and you don't care where the requests are coming from.
+     2. installed [rate package](golang.org/x/time/rate@latest)
+     3. How token-bucket rate limiters work:
         1. A limiter controls how frequently eventsare allowed to happen. It implements a "token bucket" of size _b_, initially full and refilled at rate _r_ tokens per second.
         2. In the context of our API application: 
            - a bucket starting with _b_ tokens.
            - each time a HTTP request is received, we remove one token from the bucket.
            - every 1/r seconds, a token is added back to the bucket - up to a maximum of _b_ total tokens.
            - if we receive a HTTP request and the bucket is empty, return _429 Too Many Requests_ response.
-     3. created `rateLimit()` middleware method which creates a new rate limiter for every request that it subsequently handles.
-     4. updated `errors.go` by adding the `rateLimitExceededResponse()` methods and added the `rateLimit` middleware to `routes.go` 
+     4. created `rateLimit()` middleware method which creates a new rate limiter for every request that it subsequently handles.
+     5. updated `errors.go` by adding the `rateLimitExceededResponse()` methods and added the `rateLimit` middleware to `routes.go` 
+   - 11.2: IP-based Rate Limiting
+     1. IP-based routing is more common and is used to separate rate limiter for each client, so a client making too many requests does not affect the other clients and their requests.
+     2. A conceptual way of implementing is to create an in-memory _map of rate limiters_ using the IP address for each client as the map key.
+     3. How it works:
+        - Each time a new client makes a request to the API, a new rate limiter is initialized and added to the map.
+        - For subsequent requests, the client's rate limiter is retreived from the map and the request is checked if it's permitted by calling its `Allow()` method.
+        - Due to the potential of having multiple goroutines accessing the map concurrently, we need to protect access to the map by using `mutex` to prevent race conditions.
+     4. updated `rateLimit()` method to used IP based routing. Also add `last seen` feature to prevent the map from growing indefinitely and taking up resources. <br/>
+     **Note:** This pattern works for the application running on a sing;e machine, if your infrastructure is distributed, you will need an alternative approach. Alternatively, redis can be used to maintain a request count for clients, running on a server which all the application servers can communicate with.
