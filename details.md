@@ -195,4 +195,12 @@
 12. Graceful Shutdown
     1.  _How to safely stop your running application_
     - 12.1: Sending Shutdown Signals
-      1. 
+      1. Common signals:
+        - Signal -> Description -> Keyboard shortcut -> Catchable
+          <br/>SIGINT -> Interrupt from keyboard -> Ctrl+C -> Yes
+          <br/>SIGQUIT -> Quit from keyboard -> Ctrl+\ -> Yes
+          <br/>SIGKILL -> Kill process (terminate immediately) -> - (none) -> No
+          <br/>SIGTERM -> Terminate process in orderly manner -> - (none) -> Yes
+        - Catachable signals can be intercepted by our application and either ignored, or used to trigger a certain action (such as a graceful shutdown).
+        - How to use: run your server in termina l 1, in terminal 2, get the process ID using `pgrep -l <server_name>` e.g. `pgrep -l api`, finally, terminate the application using `pkill -<signal> <server_name>` e.g. `pkill -SIGINT api`
+    - 12.2: Intercepting Shutdown Signals
