@@ -191,3 +191,8 @@
    - 11.3: Configuring the Rate Limiters
      1. Make rate limiting values i.e. requests-per-second and burst values) easily configurable so Rate limiting can be turned off if carrying out benchmarks or load testing.
      2. updated `main.go`, and `rateLimit()` method
+
+12. Graceful Shutdown
+    1.  _How to safely stop your running application_
+    - 12.1: Sending Shutdown Signals
+      1. 
