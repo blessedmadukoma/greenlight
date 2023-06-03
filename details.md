@@ -204,3 +204,4 @@
         - Catachable signals can be intercepted by our application and either ignored, or used to trigger a certain action (such as a graceful shutdown).
         - How to use: run your server in termina l 1, in terminal 2, get the process ID using `pgrep -l <server_name>` e.g. `pgrep -l api`, finally, terminate the application using `pkill -<signal> <server_name>` e.g. `pkill -SIGINT api`
     - 12.2: Intercepting Shutdown Signals
+      1. moved the `http.Server` code to a new file `server.go`
