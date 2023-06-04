@@ -205,3 +205,7 @@
         - How to use: run your server in termina l 1, in terminal 2, get the process ID using `pgrep -l <server_name>` e.g. `pgrep -l api`, finally, terminate the application using `pkill -<signal> <server_name>` e.g. `pkill -SIGINT api`
     - 12.2: Intercepting Shutdown Signals
       1. moved the `http.Server` code to a new file `server.go`
+    - 12.3: Executing the shutdown
+      1. `Shutdown()` works by first closing all open listeners, then closing all idle connections, and then waiting indefinitely for connections to return to idle and then shut down.
+      2. updated `server.go` to receive a SIGINT or SIGTERM signal, which instructs the server to stop accepting any new HTTP requests, and give any in-flight requests a ‘grace period’ of 5 seconds to complete before the application is terminated.
+      3. added `time.sleep` to `healthcheckHandler` to test out the functionality.
