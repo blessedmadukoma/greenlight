@@ -209,3 +209,6 @@
       1. `Shutdown()` works by first closing all open listeners, then closing all idle connections, and then waiting indefinitely for connections to return to idle and then shut down.
       2. updated `server.go` to receive a SIGINT or SIGTERM signal, which instructs the server to stop accepting any new HTTP requests, and give any in-flight requests a ‘grace period’ of 5 seconds to complete before the application is terminated.
       3. added `time.sleep` to `healthcheckHandler` to test out the functionality.
+
+13. User Model Setup and Registration
+    - 13.1: Setting up the Users Database Table
