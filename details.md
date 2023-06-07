@@ -212,3 +212,5 @@
 
 13. User Model Setup and Registration
     - 13.1: Setting up the Users Database Table
+      1. created migration file for creating users: `migrate create -seq -ext=.sql -dir=./migrations create_users_table`
+      2. added the SQL queries to the migration files, and ran the migrate command to make migrations: `migrate -path=./migrations -database=$GREENLIGHT_DB_DSN up`
