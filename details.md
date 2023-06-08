@@ -214,3 +214,8 @@
     - 13.1: Setting up the Users Database Table
       1. created migration file for creating users: `migrate create -seq -ext=.sql -dir=./migrations create_users_table`
       2. added the SQL queries to the migration files, and ran the migrate command to make migrations: `migrate -path=./migrations -database=$GREENLIGHT_DB_DSN up`
+    - 13.2: Setting up the Users Model
+      1. created `internal/data/users.go` for holding `User` struct for an individual user, and `UserModel` type for performing SQL queries on the users table.
+      2. Added the `bcrypt` package: `go get golang.org/x/crypto/bcrypt@latest`
+      3. added validation checks for email, plaintext passwords and users in `internal/data/users.go`
+      4. added methods such as Insert, GetByEmail and Update for the user model.
