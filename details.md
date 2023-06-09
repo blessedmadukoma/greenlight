@@ -219,3 +219,4 @@
       2. Added the `bcrypt` package: `go get golang.org/x/crypto/bcrypt@latest`
       3. added validation checks for email, plaintext passwords and users in `internal/data/users.go`
       4. added methods such as Insert, GetByEmail and Update for the user model.
+     - 13.3: Registering a User
