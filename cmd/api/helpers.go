@@ -47,6 +47,7 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data envelo
 	return nil
 }
 
+// readJSON reads the user input
 func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst interface{}) error {
 	// Limit the size of the request body to 1MB.
 	maxBytes := 1_048_576
