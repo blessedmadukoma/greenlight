@@ -226,4 +226,6 @@
 14. Sending Emails
     1.  Mailtrap SMTP service
    - 14.1: SMTP Server Setup
-     1. 
+     1. set up account in Mailtrap (https://mailtrap.io)
+   - 14.2: Creating Email Templates
+     1.  created `mailer/templates` for Email templates and added the _named templates_ values
