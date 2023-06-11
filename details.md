@@ -222,3 +222,8 @@
      - 13.3: Registering a User
       1. created `cmd/api/users.go` and added `registerUserHandler`
       2. updated `routes.go` by adding routes for creating users i.e. POST request for `/v1/users`
+
+14. Sending Emails
+    1.  Mailtrap SMTP service
+   - 14.1: SMTP Server Setup
+     1. 
