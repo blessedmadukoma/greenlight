@@ -228,4 +228,8 @@
    - 14.1: SMTP Server Setup
      1. set up account in Mailtrap (https://mailtrap.io)
    - 14.2: Creating Email Templates
-     1.  created `mailer/templates` for Email templates and added the _named templates_ values
+     1. created `mailer/templates` for Email templates and added the _named templates_ values
+   - 14.3: Creating Email Templates
+     1. installed [go-mail/mail](https://github.com/go-mail/mail/v2) package
+     2. created email helper in `internal/mailer/mailer.go` for sending the mails
+     3. added the mail SMTP settings to the `config` struct in `main.go`, added the mail helper function and method into the main

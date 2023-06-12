@@ -12,6 +12,7 @@ import (
 
 	"github.com/blessedmadukoma/greenlight/internal/data"
 	"github.com/blessedmadukoma/greenlight/internal/jsonlog"
+	"github.com/blessedmadukoma/greenlight/internal/mailer"
 	_ "github.com/joho/godotenv/autoload"
 	_ "github.com/lib/pq"
 )
@@ -32,12 +33,20 @@ type config struct {
 		burst   int
 		enabled bool
 	}
+	smtp struct {
+		host     string
+		port     int
+		username string
+		password string
+		sender   string
+	}
 }
 
 type application struct {
 	config config
 	logger *jsonlog.Logger
 	models data.Models
+	mailer mailer.Mailer
 }
 
 // limiValues retreives the values for the rate limiter from the env
@@ -61,6 +70,27 @@ func limitValues() (int, int, bool) {
 	return rps, burst, enabled
 }
 
+type SMTP struct {
+	host     string
+	port     int
+	username string
+	password string
+	sender   string
+}
+
+// getSMTP retreives the SMTP details from the env
+func getSMTP() SMTP {
+	var smtp SMTP
+
+	smtp.host = os.Getenv("SMTP_HOST")
+	smtp.port, _ = strconv.Atoi(os.Getenv("SMTP_PORT"))
+	smtp.username = os.Getenv("SMTP_USERNAME")
+	smtp.password = os.Getenv("SMTP_PASSWORD")
+	smtp.sender = os.Getenv("SMTP_EMAIL_ADDRESS")
+
+	return smtp
+}
+
 func main() {
 	var cfg config
 
@@ -80,6 +110,15 @@ func main() {
 	flag.IntVar(&cfg.limiter.burst, "limiter-burst", burst, "Rate limiter maximum burst")
 	flag.BoolVar(&cfg.limiter.enabled, "limiter-enabled", enabled, "Enable rate limiter")
 
+	var smtp = getSMTP()
+
+	// set the values for the mail
+	flag.StringVar(&cfg.smtp.host, "smtp-host", smtp.host, "SMTP host")
+	flag.IntVar(&cfg.smtp.port, "smtp-port", smtp.port, "SMTP port")
+	flag.StringVar(&cfg.smtp.username, "smtp-username", smtp.username, "SMTP username")
+	flag.StringVar(&cfg.smtp.password, "smtp-password", smtp.password, "SMTP password")
+	flag.StringVar(&cfg.smtp.sender, "smtp-sender", smtp.sender, "SMTP sender")
+
 	flag.Parse()
 
 	logger := jsonlog.New(os.Stdout, jsonlog.LevelInfo)
@@ -95,6 +134,7 @@ func main() {
 		config: cfg,
 		logger: logger,
 		models: data.NewModels(db),
+		mailer: mailer.New(cfg.smtp.host, cfg.smtp.port, cfg.smtp.username, cfg.smtp.password, cfg.smtp.sender),
 	}
 
 	err = app.serve()
