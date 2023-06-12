@@ -62,11 +62,11 @@ func (m Mailer) Send(recipient, templateFile string, data interface{}) error {
 	msg.SetBody("text/plain", plainBody.String())
 	msg.AddAlternative("text/html", htmlBody.String())
 
-	log.Println("=> Mail sent!")
-
 	err = m.dialer.DialAndSend(msg)
 	if err != nil {
 		return err
 	}
+
+	log.Println("=> Mail sent!")
 	return nil
 }

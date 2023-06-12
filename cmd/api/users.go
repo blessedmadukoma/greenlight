@@ -53,14 +53,20 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// send email
-	err = app.mailer.Send(user.Email, "user_welcome.html", user)
-	if err != nil {
-		app.serverErrorResponse(w, r, err)
-		return
-	}
+	// send email -> handle panic in background method
+	app.background(func() {
+		err = app.mailer.Send(user.Email, "user_welcome.html", user)
+		if err != nil {
+			// using app.serverErrorResponse gives error of "http: superfluous response.WriteHeader call" due to us trying to write a second HTTP response.
+			// app.serverErrorResponse(w, r, err)
+			// return
 
-	err = app.writeJSON(w, http.StatusCreated, envelope{"user": user}, nil)
+			// if there is an error, log it out
+			app.logger.PrintError(err, nil)
+		}
+	})
+
+	err = app.writeJSON(w, http.StatusAccepted, envelope{"user": user}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}

@@ -233,3 +233,8 @@
      1. installed [go-mail/mail](https://github.com/go-mail/mail/v2) package
      2. created email helper in `internal/mailer/mailer.go` for sending the mails
      3. added the mail SMTP settings to the `config` struct in `main.go`, added the mail helper function and method into the main
+   - 14.4: Sending Background Emails
+     1. reduce latency by sending email in background goroutine.
+     2. changed the Send implementation to run in a goroutine in `cmd/api/users.go`.
+     3. set up a panic recovery in `cmd/api/users.go` for the mail since it runs in goroutine and uses a third party package.
+     4. added `background` helper method to run arbituary functions or background tasks e.g. sending mail in the background
