@@ -250,4 +250,7 @@
       1. created new migration file for `create_tokens` table: `migrate create -seq -ext .sql -dir ./migrations create_tokens_table`, added the sql queries to create tokens table and drop tokens table respectfully.
       2. ran: `make migrateup`
     - 15.2: Creating Secure Activation Tokens
-      1. 
+      1. the token to be generated using the following criteria: a cryptographically secure random number generator (CSPRNG) and enough entropy (randomness).
+      2. created `tokens.go` which generates the tokens.
+      3. created `TokenModel` type to encapsulate the database interactions and created token validation checks.
+      4. added the created `TokenModel` to the parent `Models` struct.
