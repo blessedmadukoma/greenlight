@@ -243,3 +243,11 @@
      2. updated `main.go` to use `sync.WaitGroup` in the `application` struct
      3. added the waitgroup counter (increment) in `helpers.go`
      4. updated `serve()` to use the sync.WaitGroup
+
+15. User Activation
+    1. Set up an account activation instruction/workflow for users in their welcome email. Generation of secure random tokens which the user will use for verification (within a specific time frame/expiry), after, will be deleted, and scope (which contains the purpose of the token i.e. authentication, or activation)
+    - 15.1: Setting up the Tokens Database Table
+      1. created new migration file for `create_tokens` table: `migrate create -seq -ext .sql -dir ./migrations create_tokens_table`, added the sql queries to create tokens table and drop tokens table respectfully.
+      2. ran: `make migrateup`
+    - 15.2: Creating Secure Activation Tokens
+      1. 
