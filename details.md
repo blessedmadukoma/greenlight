@@ -238,3 +238,8 @@
      2. changed the Send implementation to run in a goroutine in `cmd/api/users.go`.
      3. set up a panic recovery in `cmd/api/users.go` for the mail since it runs in goroutine and uses a third party package.
      4. added `background` helper method to run arbituary functions or background tasks e.g. sending mail in the background
+   - 14.5: Graceful Shutdown of Background Tasks
+     1. used `sync.WaitGroup` to coordinate graceful shutdown and our background goroutines. How it works: conceptually like a ‘counter’. Each time a background goroutine is launched, the counter is incremented by 1, and when each goroutine finishes, the counter is decremented by 1. We monitor the counter, when it equals zero, all the background goroutines have finished.
+     2. updated `main.go` to use `sync.WaitGroup` in the `application` struct
+     3. added the waitgroup counter (increment) in `helpers.go`
+     4. updated `serve()` to use the sync.WaitGroup
