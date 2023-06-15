@@ -254,3 +254,6 @@
       2. created `tokens.go` which generates the tokens.
       3. created `TokenModel` type to encapsulate the database interactions and created token validation checks.
       4. added the created `TokenModel` to the parent `Models` struct.
+    - 15.3: Sending Activation Tokens
+      1. updated the `user_welcom.html` email template by adding the activation token.
+      2. updated `users.go` by adding the code to generate new user token

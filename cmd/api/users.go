@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/blessedmadukoma/greenlight/internal/data"
 	"github.com/blessedmadukoma/greenlight/internal/validator"
@@ -53,9 +54,22 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	// generate token
+	token, err := app.models.Tokens.New(user.ID, 12*time.Hour, data.ScopeActivation)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
 	// send email -> handle panic in background method
 	app.background(func() {
-		err = app.mailer.Send(user.Email, "user_welcome.html", user)
+		data := map[string]interface{}{
+			"activationToken": token.Plaintext,
+			"userID":          user.ID,
+			"Name":            user.Name,
+		}
+
+		err = app.mailer.Send(user.Email, "user_welcome.html", data)
 		if err != nil {
 			// using app.serverErrorResponse gives error of "http: superfluous response.WriteHeader call" due to us trying to write a second HTTP response.
 			// app.serverErrorResponse(w, r, err)
@@ -70,5 +84,4 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
-
 }
