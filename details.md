@@ -257,3 +257,10 @@
     - 15.3: Sending Activation Tokens
       1. updated the `user_welcom.html` email template by adding the activation token.
       2. updated `users.go` by adding the code to generate new user token
+    - 15.4: Activating a User
+      1. created `activateUserHandler` in `cmd/api/users.go` to activate a user account through the token.
+      2. created `GetForToken` to retreive a user's details using the validated token (inner join).
+      3. added route for activating a user i.e. `/v1/users/activated`
+
+16. Authentication
+   - 16.1: Authentication Options
