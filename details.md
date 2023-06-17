@@ -263,4 +263,10 @@
       3. added route for activating a user i.e. `/v1/users/activated`
 
 16. Authentication
-   - 16.1: Authentication Options
+    1.  Authenticate users (confirm who a user is, different from authorization - checking whether a user is permited to do something).
+    - 16.1: Authentication Options
+      1. **Basic (HTTP) authentication:** the client includes an Authorization header with every request containing their credentials. Example: `Authorization: Basic YWxpY2VAZXhhbXBsZS5jb206cGE1NXdvcmQ=`
+      2. Stateful token authentication:
+      3. stateless token authentication:
+      4. API key authentication:
+      5. OAuth 2.0 / OpenID Connect: 
