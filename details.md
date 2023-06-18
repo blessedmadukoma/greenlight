@@ -281,8 +281,30 @@
           2. stateless token authentication:
             - stateless tokens encode the user ID and expiry time in the token itself.
             - Technologies for creating stateless tokens include: `JWT`, `PASETO`, `Branca`, `nacl/secretbox` etc.
-            - <ul>Advantage:</ul> Encoding and decoding of token can be done in memory, all the information required to identify the user is contained within the token itself. No need to perform a database lookup to findout who the request is coming from.
-            - <ul>Disadvantage:</ul> The token cannot easily be revoked once issued.
-            - **Note:** In an emergency, _all_ tokens could be revoked by changing the secret used in signing the tokens, forcing all users to re-authenticate, or another way is to maintain a blocklist of revoked tokens in a db (which defeata the 'stateless' aspect of having a stateless token). Generally not the best choice for managing authentication in most API applications
+            - <ins>Advantage:</ins> Encoding and decoding of token can be done in memory, all the information required to identify the user is contained within the token itself. No need to perform a database lookup to findout who the request is coming from.
+            - <ins>Disadvantage:</ins> The token cannot easily be revoked once issued.
+            - **Note:** In an emergency, _all_ tokens could be revoked by changing the secret used in signing the tokens, forcing all users to re-authenticate, or another way is to maintain a blocklist of revoked tokens in a database (which defeata the 'stateless' aspect of having a stateless token). Generally not the best choice for managing authentication in most API applications, but if a microservice-style architecture system is being built, a stateless token created by an authentication service can be passed to other services to identify the user. 
       3. API key authentication:
-      4. OAuth 2.0 / OpenID Connect: 
+        - a user has a non-expiring secret 'key' associated with their account. The key is stored along side the corresponding user ID in the database. The key is passed to the API in a header: `Authorization: Key <key>`.
+        - Difference between key and stateful token is the key is permanent unlinke the stateful tokens which are temporary.
+        - <ins>Advantage:</ins> use of the same key for every request and no need to write code to manage the key or expiry.
+        - <ins>Disadvantage:</ins> additional complexity - a way for users to regenerate their API key if they lose it or the key is compromised. Also, support for multiple API keys for the same user, so different keys for different purposes.
+      4. OAuth 2.0 / OpenID Connect:
+        - information about your users (and their passwords) is stored by a third-party identity provider e.g. Google or Facebook rather than yourself.
+        - **Note:** OAuth 2.0 is not _an authentication protocol_, and it should not really be used for authenticating users.
+        - To build authentication checks against a third-party identity provider, user [OpeID Connect](https://openid.net/connect/), which is directly built on top of OAuth 2.0.
+        - How it works:
+          + When you want to authenticate a request, you redirect the user to an 'authentication and consent' form hosted by the identity provider.
+          + If the user consents, then the identity provider sends your API an authorization code. 
+          + Your API then sends the authorization code to another endpoint provided by the identity provider. They verify the authorization code, and if it’s valid they will send you a JSON response containing an ID token.
+          + This ID token is itself a JWT. You need to validate and decode this JWT to get the actual user information, which includes things like their email address, name, birth date,timezone etc.
+          + Now that you know who the user is, you can then implement a stateful or stateless authentication token pattern so that you don’t have to go through the whole process for every subsequent request.
+        - <ins>Advantage:</ins> no need to persistently store user information or passwords yourself.
+        - <ins>Disadvantage:</ins> quite complex. Some packages ike [go-oidc]() help in masking the complexity and providing a simple interface fot ehOpenID connect workflow. Also, OpenID Connect requires all users to have an account with the identity provider.
+      - What authentication approach should I use?
+        - Basic HTTP authentication: If your API doesn’t have ‘real’ user accounts with slow password hashes.
+        - OpenID Connect: If you don’t want to store user passwords yourself, all your users have accounts with a third-party identity provider that supports OpenID Connect, and your API is the back-end for a website.
+        - Stateless authentication token: If you require delegated authentication, such as when your API has a microservice architecture with different services for performing authentication and performing other tasks.
+        - API keys or Stateful authentication tokens:
+          - **Stateful authentication tokens** are a nice fit for APIs that act as the back-end for a website or single-page application, as there is a natural moment when the user logs-in where they can be exchanged for user credentials.
+          - In contrast, **API keys** can be better for more ‘general purpose’ APIs because they’re permanent and simpler for developers to use in their applications and scripts.
