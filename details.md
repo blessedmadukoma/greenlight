@@ -265,8 +265,24 @@
 16. Authentication
     1.  Authenticate users (confirm who a user is, different from authorization - checking whether a user is permited to do something).
     - 16.1: Authentication Options
-      1. **Basic (HTTP) authentication:** the client includes an Authorization header with every request containing their credentials. Example: `Authorization: Basic YWxpY2VAZXhhbXBsZS5jb206cGE1NXdvcmQ=`
-      2. Stateful token authentication:
-      3. stateless token authentication:
-      4. API key authentication:
-      5. OAuth 2.0 / OpenID Connect: 
+      1. **Basic (HTTP) authentication:** The simplest way to determine who is making a request to your API. The client includes an Authorization header with every request containing their credentials. Example: `Authorization: Basic YWxpY2VAZXhhbXBsZS5jb206cGE1NXdvcmQ=`. 
+      2. Token Authentication:
+        - Sometimes known as _Bearer Token Authentication_
+        - How it works:
+          1. The client sends a request to your API containing their credentials (typically username or email address, and password).
+          2. The API verifies that the credentials are correct, generates a bearer token which represents the user, and sends it back to the user. The token expires after a set period of time, after which the user will need to resubmit their credentials again to get a new token.
+          3. For subsequent requests to the API, the client includes the token in an Authorization header like this: `Authorization: Bearer <token>`.
+          4. When your API receives this request, it checks that the token hasn’t expired and examines the token value to determine who the user is.
+        - Types of token authentication:
+          1. Stateful token authentication:
+            - Token is stored server-side in a database alongside the user ID and expiry time for the token.
+            - Advantage: API maintains control over the tokens.
+            - Disadvantage: Database lookup
+          2. stateless token authentication:
+            - stateless tokens encode the user ID and expiry time in the token itself.
+            - Technologies for creating stateless tokens include: `JWT`, `PASETO`, `Branca`, `nacl/secretbox` etc.
+            - <ul>Advantage:</ul> Encoding and decoding of token can be done in memory, all the information required to identify the user is contained within the token itself. No need to perform a database lookup to findout who the request is coming from.
+            - <ul>Disadvantage:</ul> The token cannot easily be revoked once issued.
+            - **Note:** In an emergency, _all_ tokens could be revoked by changing the secret used in signing the tokens, forcing all users to re-authenticate, or another way is to maintain a blocklist of revoked tokens in a db (which defeata the 'stateless' aspect of having a stateless token). Generally not the best choice for managing authentication in most API applications
+      3. API key authentication:
+      4. OAuth 2.0 / OpenID Connect: 
