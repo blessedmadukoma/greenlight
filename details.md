@@ -308,3 +308,8 @@
         - API keys or Stateful authentication tokens:
           - **Stateful authentication tokens** are a nice fit for APIs that act as the back-end for a website or single-page application, as there is a natural moment when the user logs-in where they can be exchanged for user credentials.
           - In contrast, **API keys** can be better for more ‘general purpose’ APIs because they’re permanent and simpler for developers to use in their applications and scripts.
+    - 16.2: Generating Authentication Tokens
+      1. **Note:** Stateful authentication tokenis used as the authenticatino option.
+      2. updated `internal/data/tokens.go` by adding the `ScopeAuthentication` and json tags for the `Token` struct`
+      3. created method for `createAuthenticationHandler` in `cmd/api/tokens.go`, and added `invalidCredentialsResponse` method in `errors.go`
+      4. added the route for the newly created method `createAuthenticationHandler` in `routes.go` using `/v1/tokens/authentication`.

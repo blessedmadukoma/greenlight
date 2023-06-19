@@ -12,15 +12,16 @@ import (
 )
 
 const (
-	ScopeActivation = "activation"
+	ScopeActivation     = "activation"
+	ScopeAuthentication = "authentication"
 )
 
 type Token struct {
-	Plaintext string
-	Hash      []byte
-	UserID    int64
-	Expiry    time.Time
-	Scope     string
+	Plaintext string    `json:"token"`
+	Hash      []byte    `json:"-"` // hide the hash from the JSON output
+	UserID    int64     `json:"-"` // hide the user ID from the JSON output
+	Expiry    time.Time `json:"expiry"`
+	Scope     string    `json:"-"` // hide the scope from the JSON output
 }
 
 // generateToken generates token using Go’s crypto/rand package and 128-bits (16 bytes) of entropy based on the scope
