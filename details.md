@@ -313,3 +313,9 @@
       2. updated `internal/data/tokens.go` by adding the `ScopeAuthentication` and json tags for the `Token` struct`
       3. created method for `createAuthenticationHandler` in `cmd/api/tokens.go`, and added `invalidCredentialsResponse` method in `errors.go`
       4. added the route for the newly created method `createAuthenticationHandler` in `routes.go` using `/v1/tokens/authentication`.
+    - 16.3: Authenticating Requests
+      1. created anonymous user in `internal/data/users.go` which acts as dummy response if no authorization header is provided in the request.
+      2. created `cmd/api/context.go` as a helper method to read/write the `User` struct to and from the request context.
+      3. created `authenticate` method and added the code to validate the token and return the appropriate responses.
+      4. added `invalidAuthenticationTokenResponse` error method helper to `errors.go`.
+      5. added the `authenticate` method to `routes.go`.
