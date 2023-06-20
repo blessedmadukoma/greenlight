@@ -328,3 +328,6 @@
     3. wrapped all the movies routes in `routes.go` using the newly created middleware method `requireActivatedUser()`.
     4. moved the code to check if user is anonymous to a new middleware method `requireAuthenticatedUser` for verifying if a user is authenticated or not. The `requireActivatedUser` calls the `requireAuthenticatedUser` before executing itself.
     5. **Note:** if there are only a couple of endpoints needing the authorization checks, rather than using middle ware it is often easier to do the checks inside of the relevant handler instead.
+  - 17.2: Setting up the Permissions Database Table
+    1. only users with a specific permission cn perform specific operations e.g. movies:read - fetch and filter movies, and movies:write - create, edit and delete movies.
+    2. created and ran the sql migration for permissions table: `migrate create -seq -ext .sql -dir ./migrations add_permissions` and added the corresponding SQL statements. The primary key statement i.e. `PRIMARY KEY (user_id, permission_id)` sets a composite primary key on the `users_permissions` table, where the primary key is made up of both the `users_id` and `permission_id` columns. This means the user/permission combination can only appear once in the table and cannot be duplicated.
