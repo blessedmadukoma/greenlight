@@ -319,3 +319,11 @@
       3. created `authenticate` method and added the code to validate the token and return the appropriate responses.
       4. added `invalidAuthenticationTokenResponse` error method helper to `errors.go`.
       5. added the `authenticate` method to `routes.go`.
+
+17. Permission-based Authorization
+  18. Perform different authorization checks to restrict access to the API endpoints. Restricting access to the movies endpoints.
+  - 17.1: Requiring User Activation
+    1. added new error methods (`authenticationRequiredResponse` and `inactiveAccountResponse`) in `errors.go` for returning status unauthorized and status forbidden.
+    2. implemented `requireActivatedUser()` middleware method in `middleware.go` to handle the checks for activated users i.e. if user is anonymous, send 401 Unauthorized response (401 is for missing or bad authentication), else if user is not anonymous **AND** is **NOT** activated, send 403 Forbidden response (403 is for an authenticated user performing an action that he or she is not allowed to, different from 405 method not allowed), else, carry on!
+    3. wrapped all the movies routes in `routes.go` using the newly created middleware method `requireActivatedUser()`.
+    4. moved the code to check if user is anonymous to a new middleware method `requireAuthenticatedUser` for verifying if a user is authenticated or not. The `requireActivatedUser` calls the `requireAuthenticatedUser` before executing itself.
