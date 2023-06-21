@@ -337,3 +337,8 @@
     1. created `notPermittedResponse` method helper to return 403 Forbidden.
     2. created `requirePermission` middleware, which wraps the existing `requireActivatedUser` middleware - which in turn wraps `requireAuthenticatedUser` middleware. This means there are three checks: authenticated (anonymous), activated user, and who has a specific permission.
     3. added the middleware `requirePermission` to `routes.go`.
+  - 17.5: Granting Permissions
+    1. once a user registers, a _read_ permission is given by default.
+    2. added a new method `AddForUser` to the PermissionModel struct to add one or more permission codes for a specific user.
+    3. added the newly created method to the `registerUserHandler` to give a newly created user the default read permission.
+    4. 
