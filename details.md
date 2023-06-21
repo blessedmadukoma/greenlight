@@ -333,3 +333,7 @@
     2. created and ran the sql migration for permissions table: `migrate create -seq -ext .sql -dir ./migrations add_permissions` and added the corresponding SQL statements. The primary key statement i.e. `PRIMARY KEY (user_id, permission_id)` sets a composite primary key on the `users_permissions` table, where the primary key is made up of both the `users_id` and `permission_id` columns. This means the user/permission combination can only appear once in the table and cannot be duplicated.
   - 17.3: Setting up the Permissions Model
     1. created `internal/data/permissions.go` to handle the database interactions and added the `PermissionModel` to the parent `Model` struct.
+  - 17.4: Checking Permissions
+    1. created `notPermittedResponse` method helper to return 403 Forbidden.
+    2. created `requirePermission` middleware, which wraps the existing `requireActivatedUser` middleware - which in turn wraps `requireAuthenticatedUser` middleware. This means there are three checks: authenticated (anonymous), activated user, and who has a specific permission.
+    3. added the middleware `requirePermission` to `routes.go`.
