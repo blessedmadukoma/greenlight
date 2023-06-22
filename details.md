@@ -341,4 +341,10 @@
     1. once a user registers, a _read_ permission is given by default.
     2. added a new method `AddForUser` to the PermissionModel struct to add one or more permission codes for a specific user.
     3. added the newly created method to the `registerUserHandler` to give a newly created user the default read permission.
-    4. 
+
+18. Cross Origin Requests
+  - 18.1: An Overview of CORS
+    1. A webpage on one origin can embed certain types of resources from another origin in their HTML — including images, CSS, and JavaScript files. For example, doing this is in your webpage is OK: <br/>
+    <code><img src="http://anotherorigin.com/example.png" alt="example image"></code> <br/>
+    2. A webpage on one origin can send data to a different origin. For example, it’s OK for a HTML form in a webpage to submit data to a different origin.
+    3. But a webpage on one origin is not allowed to receive data from a different origin.
