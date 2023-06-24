@@ -348,3 +348,5 @@
     <code><img src="http://anotherorigin.com/example.png" alt="example image"></code> <br/>
     2. A webpage on one origin can send data to a different origin. For example, it’s OK for a HTML form in a webpage to submit data to a different origin.
     3. But a webpage on one origin is not allowed to receive data from a different origin.
+  - 18.2: Demonstrating the Same-Origin Policy
+    1. created `cmd/examples/cors/simple/main.go` to hold the code for making the cross-origin request.
