@@ -355,3 +355,5 @@
     2. added the new middleware method to `routes.go`.
     3. updated `main.go` to use trusted origins from flag or env.
     4. updated `enableCORS` middleware by adding and checking the existence of the trustedOrigins config.
+  - 18.4: Preflight CORS Requests
+    1. 
