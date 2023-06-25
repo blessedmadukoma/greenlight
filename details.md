@@ -350,3 +350,8 @@
     3. But a webpage on one origin is not allowed to receive data from a different origin.
   - 18.2: Demonstrating the Same-Origin Policy
     1. created `cmd/examples/cors/simple/main.go` to hold the code for making the cross-origin request.
+  - 18.3: Simple CORS Requests
+    1. created `enableCORS` method in `middleware.go` which handle CORS requests.
+    2. added the new middleware method to `routes.go`.
+    3. updated `main.go` to use trusted origins from flag or env.
+    4. updated `enableCORS` middleware by adding and checking the existence of the trustedOrigins config.
