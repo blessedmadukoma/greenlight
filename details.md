@@ -356,4 +356,18 @@
     3. updated `main.go` to use trusted origins from flag or env.
     4. updated `enableCORS` middleware by adding and checking the existence of the trustedOrigins config.
   - 18.4: Preflight CORS Requests
-    1. 
+    1. demonstrated a preflight request
+      - created an example webpage in `cmd/examples/cors` to make a request to the _POST /v1/tokens/authentication_ endpoint
+      - created `cmd/examples/cors/preflight/main.go`.
+    2. a preflight request always contains three components:
+      - the HTTP method **OPTIONS**
+      - an **Origin** header and
+      - an **Access-Control-Request-Method** header.<br/> 
+    **Note:** If any one of these is missing, it is not a preflight request.
+    3. Once the preflight request is identified, we send a **200 OK** response with some special headers to inform the browser wether or not it is OK for the real request to proceed. The headers include:
+      - **Access-Control-Allow-Origin** - reflects the value of the preflight request's `Origin` header.
+      - **Access-Control-Allow-Methods** - lists the HTTP methods that can be used in real cross-origin requests to the URL.
+      - **Access-Control-Allow-Headers** - lists the request headers that can be included in real cross-origin requests to the URL.
+    4. Updating the middleware:
+      - updated `enableCORS` to check if it is a preflight request by checking if the request has HTTP method OPTIONS and contains the "Access-Control-Request-Method" header.
+      - To test, open two terminals. On the first, run: `go run ./cmd/examples/cors/preflight`. In the second, run: `go run ./cmd/api -cors-trusted-origins="http://localhost:9000"`. Then open `localhost:9000` on your browser and view the output, also look at the Network tab for more details on the request made.
