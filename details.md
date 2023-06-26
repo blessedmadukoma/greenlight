@@ -225,24 +225,24 @@
 
 14. Sending Emails
     1.  Mailtrap SMTP service
-   - 14.1: SMTP Server Setup
-     1. set up account in Mailtrap (https://mailtrap.io)
-   - 14.2: Creating Email Templates
-     1. created `mailer/templates` for Email templates and added the _named templates_ values
-   - 14.3: Creating Email Templates
-     1. installed [go-mail/mail](https://github.com/go-mail/mail/v2) package
-     2. created email helper in `internal/mailer/mailer.go` for sending the mails
-     3. added the mail SMTP settings to the `config` struct in `main.go`, added the mail helper function and method into the main
-   - 14.4: Sending Background Emails
-     1. reduce latency by sending email in background goroutine.
-     2. changed the Send implementation to run in a goroutine in `cmd/api/users.go`.
-     3. set up a panic recovery in `cmd/api/users.go` for the mail since it runs in goroutine and uses a third party package.
-     4. added `background` helper method to run arbituary functions or background tasks e.g. sending mail in the background
-   - 14.5: Graceful Shutdown of Background Tasks
-     1. used `sync.WaitGroup` to coordinate graceful shutdown and our background goroutines. How it works: conceptually like a ‘counter’. Each time a background goroutine is launched, the counter is incremented by 1, and when each goroutine finishes, the counter is decremented by 1. We monitor the counter, when it equals zero, all the background goroutines have finished.
-     2. updated `main.go` to use `sync.WaitGroup` in the `application` struct
-     3. added the waitgroup counter (increment) in `helpers.go`
-     4. updated `serve()` to use the sync.WaitGroup
+      - 14.1: SMTP Server Setup
+        1. set up account in Mailtrap (https://mailtrap.io)
+      - 14.2: Creating Email Templates
+        1. created `mailer/templates` for Email templates and added the _named templates_ values
+      - 14.3: Creating Email Templates
+        1. installed [go-mail/mail](https://github.com/go-mail/mail/v2) package
+        2. created email helper in `internal/mailer/mailer.go` for sending the mails
+        3. added the mail SMTP settings to the `config` struct in `main.go`, added the mail helper function and method into the main
+      - 14.4: Sending Background Emails
+        1. reduce latency by sending email in background goroutine.
+        2. changed the Send implementation to run in a goroutine in `cmd/api/users.go`.
+        3. set up a panic recovery in `cmd/api/users.go` for the mail since it runs in goroutine and uses a third party package.
+        4. added `background` helper method to run arbituary functions or background tasks e.g. sending mail in the background
+      - 14.5: Graceful Shutdown of Background Tasks
+        1. used `sync.WaitGroup` to coordinate graceful shutdown and our background goroutines. How it works: conceptually like a ‘counter’. Each time a background goroutine is launched, the counter is incremented by 1, and when each goroutine finishes, the counter is decremented by 1. We monitor the counter, when it equals zero, all the background goroutines have finished.
+        2. updated `main.go` to use `sync.WaitGroup` in the `application` struct
+        3. added the waitgroup counter (increment) in `helpers.go`
+        4. updated `serve()` to use the sync.WaitGroup
 
 15. User Activation
     1. Set up an account activation instruction/workflow for users in their welcome email. Generation of secure random tokens which the user will use for verification (within a specific time frame/expiry), after, will be deleted, and scope (which contains the purpose of the token i.e. authentication, or activation)
@@ -263,7 +263,7 @@
       3. added route for activating a user i.e. `/v1/users/activated`
 
 16. Authentication
-    1.  Authenticate users (confirm who a user is, different from authorization - checking whether a user is permited to do something).
+    1. Authenticate users (confirm who a user is, different from authorization - checking whether a user is permited to do something).
     - 16.1: Authentication Options
       1. **Basic (HTTP) authentication:** The simplest way to determine who is making a request to your API. The client includes an Authorization header with every request containing their credentials. Example: `Authorization: Basic YWxpY2VAZXhhbXBsZS5jb206cGE1NXdvcmQ=`. 
       2. Token Authentication:
@@ -321,26 +321,26 @@
       5. added the `authenticate` method to `routes.go`.
 
 17. Permission-based Authorization
-  18. Perform different authorization checks to restrict access to the API endpoints. Restricting access to the movies endpoints.
-  - 17.1: Requiring User Activation
-    1. added new error methods (`authenticationRequiredResponse` and `inactiveAccountResponse`) in `errors.go` for returning status unauthorized and status forbidden.
-    2. implemented `requireActivatedUser()` middleware method in `middleware.go` to handle the checks for activated users i.e. if user is anonymous, send 401 Unauthorized response (401 is for missing or bad authentication), else if user is not anonymous **AND** is **NOT** activated, send 403 Forbidden response (403 is for an authenticated user performing an action that he or she is not allowed to, different from 405 method not allowed), else, carry on!
-    3. wrapped all the movies routes in `routes.go` using the newly created middleware method `requireActivatedUser()`.
-    4. moved the code to check if user is anonymous to a new middleware method `requireAuthenticatedUser` for verifying if a user is authenticated or not. The `requireActivatedUser` calls the `requireAuthenticatedUser` before executing itself.
-    5. **Note:** if there are only a couple of endpoints needing the authorization checks, rather than using middle ware it is often easier to do the checks inside of the relevant handler instead.
-  - 17.2: Setting up the Permissions Database Table
-    1. only users with a specific permission cn perform specific operations e.g. movies:read - fetch and filter movies, and movies:write - create, edit and delete movies.
-    2. created and ran the sql migration for permissions table: `migrate create -seq -ext .sql -dir ./migrations add_permissions` and added the corresponding SQL statements. The primary key statement i.e. `PRIMARY KEY (user_id, permission_id)` sets a composite primary key on the `users_permissions` table, where the primary key is made up of both the `users_id` and `permission_id` columns. This means the user/permission combination can only appear once in the table and cannot be duplicated.
-  - 17.3: Setting up the Permissions Model
-    1. created `internal/data/permissions.go` to handle the database interactions and added the `PermissionModel` to the parent `Model` struct.
-  - 17.4: Checking Permissions
-    1. created `notPermittedResponse` method helper to return 403 Forbidden.
-    2. created `requirePermission` middleware, which wraps the existing `requireActivatedUser` middleware - which in turn wraps `requireAuthenticatedUser` middleware. This means there are three checks: authenticated (anonymous), activated user, and who has a specific permission.
-    3. added the middleware `requirePermission` to `routes.go`.
-  - 17.5: Granting Permissions
-    1. once a user registers, a _read_ permission is given by default.
-    2. added a new method `AddForUser` to the PermissionModel struct to add one or more permission codes for a specific user.
-    3. added the newly created method to the `registerUserHandler` to give a newly created user the default read permission.
+    1. Perform different authorization checks to restrict access to the API endpoints. Restricting access to the movies endpoints.
+    - 17.1: Requiring User Activation
+      1. added new error methods (`authenticationRequiredResponse` and `inactiveAccountResponse`) in `errors.go` for returning status unauthorized and status forbidden.
+      2. implemented `requireActivatedUser()` middleware method in `middleware.go` to handle the checks for activated users i.e. if user is anonymous, send 401 Unauthorized response (401 is for missing or bad authentication), else if user is not anonymous **AND** is **NOT** activated, send 403 Forbidden response (403 is for an authenticated user performing an action that he or she is not allowed to, different from 405 method not allowed), else, carry on!
+      3. wrapped all the movies routes in `routes.go` using the newly created middleware method `requireActivatedUser()`.
+      4. moved the code to check if user is anonymous to a new middleware method `requireAuthenticatedUser` for verifying if a user is authenticated or not. The `requireActivatedUser` calls the `requireAuthenticatedUser` before executing itself.
+      5. **Note:** if there are only a couple of endpoints needing the authorization checks, rather than using middle ware it is often easier to do the checks inside of the relevant handler instead.
+    - 17.2: Setting up the Permissions Database Table
+      1. only users with a specific permission cn perform specific operations e.g. movies:read - fetch and filter movies, and movies:write - create, edit and delete movies.
+      2. created and ran the sql migration for permissions table: `migrate create -seq -ext .sql -dir ./migrations add_permissions` and added the corresponding SQL statements. The primary key statement i.e. `PRIMARY KEY (user_id, permission_id)` sets a composite primary key on the `users_permissions` table, where the primary key is made up of both the `users_id` and `permission_id` columns. This means the user/permission combination can only appear once in the table and cannot be duplicated.
+    - 17.3: Setting up the Permissions Model
+      1. created `internal/data/permissions.go` to handle the database interactions and added the `PermissionModel` to the parent `Model` struct.
+    - 17.4: Checking Permissions
+      1. created `notPermittedResponse` method helper to return 403 Forbidden.
+      2. created `requirePermission` middleware, which wraps the existing `requireActivatedUser` middleware - which in turn wraps `requireAuthenticatedUser` middleware. This means there are three checks: authenticated (anonymous), activated user, and who has a specific permission.
+      3. added the middleware `requirePermission` to `routes.go`.
+    - 17.5: Granting Permissions
+      1. once a user registers, a _read_ permission is given by default.
+      2. added a new method `AddForUser` to the PermissionModel struct to add one or more permission codes for a specific user.
+      3. added the newly created method to the `registerUserHandler` to give a newly created user the default read permission.
 
 18. Cross Origin Requests
   - 18.1: An Overview of CORS
@@ -371,3 +371,7 @@
     4. Updating the middleware:
       - updated `enableCORS` to check if it is a preflight request by checking if the request has HTTP method OPTIONS and contains the "Access-Control-Request-Method" header.
       - To test, open two terminals. On the first, run: `go run ./cmd/examples/cors/preflight`. In the second, run: `go run ./cmd/api -cors-trusted-origins="http://localhost:9000"`. Then open `localhost:9000` on your browser and view the output, also look at the Network tab for more details on the request made.
+
+19. Metrics
+    
+    > learn how to use the `expvar` package to view application metrics in JSON format via a HTTP handler, what default application metrics are available, how to create your own custom metrics for monitoring the number of active goroutines and database connection pool, and how to use middleware to monitor reques-level application metrics, including the counts of different HTTP status codes.
