@@ -375,3 +375,8 @@
 19. Metrics
     
     > learn how to use the `expvar` package to view application metrics in JSON format via a HTTP handler, what default application metrics are available, how to create your own custom metrics for monitoring the number of active goroutines and database connection pool, and how to use middleware to monitor reques-level application metrics, including the counts of different HTTP status codes.
+  - **19.1:** Exposing Metrics with Expvar
+    1. added new route `/debug/vars` to `routes.go` for viewing the metrics on the browser. Ran the terminal: `go run ./cmd/api -limiter-enabled=false -port=4000`.
+    2. **Note:** "cmdline" contains an array of the command-line arguments used to run the application, beginning with the program name. "memstats" contains a 'moment-in-time' snapshot of memory usage, as returned by the `runtime.Memstats()` function.
+  - **19.2:** Creating Custom Metrics
+    1. 
