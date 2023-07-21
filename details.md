@@ -379,4 +379,6 @@
     1. added new route `/debug/vars` to `routes.go` for viewing the metrics on the browser. Ran the terminal: `go run ./cmd/api -limiter-enabled=false -port=4000`.
     2. **Note:** "cmdline" contains an array of the command-line arguments used to run the application, beginning with the program name. "memstats" contains a 'moment-in-time' snapshot of memory usage, as returned by the `runtime.Memstats()` function.
   - **19.2:** Creating Custom Metrics
-    1. 
+    1. added new "version" to the `main.go`
+    2. published the information about the state of our db connection pool and the current Unix timestamp (with second precision) in `main.go`.
+    3. Note: the metrics view `/debug/vars` should not be exposed publicly as someone outside can cause a DOS attack
