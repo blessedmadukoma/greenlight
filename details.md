@@ -382,3 +382,12 @@
     1. added new "version" to the `main.go`
     2. published the information about the state of our db connection pool and the current Unix timestamp (with second precision) in `main.go`.
     3. Note: the metrics view `/debug/vars` should not be exposed publicly as someone outside can cause a DOS attack
+  - **19.3:** Request-level Metrics
+    1. requesting: the total number of requests received, total number of reponses sent, and the total (cumulative) time taken to process all requests in _microseconds_.
+    2. created `metrics` middleware to record custom _request-levl metrics_ for the application.
+    3. added the `metrics` middleware to `routes.go`. Rerun the server and visit "server_address/debug/vars", view the total_requests_received, total_responses_sent and total_processing_time_µs.
+    4. **Note: to calculate the following:** <br/>
+       - average processing time per request: **total_processing_time_µs/total_requests_received = answer (in µs i.e. microseconds/requests), mulitplied by 0.000001 = answer (in seconds/requests)**.
+       - active in-flight requests: **total_requests_received - total_responses_sent**.
+       - average number of requests received per second (between calls A and B to `GET /debug/vars` endpoint): **(total_requests_received_B - total_requests_received_A) / (timestamp_B - timestamp_A)**.
+       - average processing time per request (between calls A and B to `GET /debug/vars` endpoint): **(total_processing_time_μs_B - total_processing_time_μs_A) / (total_requests_received_B - total_requests_received_A)**.
