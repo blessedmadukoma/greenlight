@@ -394,3 +394,7 @@
   - **19.4:** Recording HTTP Status Codes
     1. go get [httpsnoop](github.com/felixge/httpsnoop) package to capture response status codes, total processing time for each request and size of each responses.
     2. updated the `metrics` middleware by adding the installed httpsnoop package.
+
+20. Building, Versioning and Quality Control
+    
+    > learn how to: use `Makefile` to automate tasks, perform quality control checks using `go vet` and `staticcheck` tools, vendor third-party packages incase they become unavailable in the future.
