@@ -396,4 +396,11 @@
     2. updated the `metrics` middleware by adding the installed httpsnoop package.
 
 20. Building, Versioning and Quality Control
+    
     > learn how to: use `Makefile` to automate tasks, perform quality control checks using `go vet` and `staticcheck` tools, vendor third-party packages incase they become unavailable in the future.
+  - **20.1:** Creating and Using Makefiles
+    1. installed the `make` utility using `brew install make`
+    2. added `make run` and other commands, representing `go run ./cmd/api` to run the server
+    3. added a prerequisite command `confirm` to request for user input before running the migration up.
+    4. added help information using `help`. This is the first rule in the Makefile because if you run `make` without any target, the first rule is the first command that will be executed.
+    5. PHONY targets: not really the name of a file; rather it is just a name for a rule to be executed
