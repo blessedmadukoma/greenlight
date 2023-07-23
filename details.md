@@ -391,3 +391,6 @@
        - active in-flight requests: **total_requests_received - total_responses_sent**.
        - average number of requests received per second (between calls A and B to `GET /debug/vars` endpoint): **(total_requests_received_B - total_requests_received_A) / (timestamp_B - timestamp_A)**.
        - average processing time per request (between calls A and B to `GET /debug/vars` endpoint): **(total_processing_time_μs_B - total_processing_time_μs_A) / (total_requests_received_B - total_requests_received_A)**.
+  - **19.4:** Recording HTTP Status Codes
+    1. go get [httpsnoop](github.com/felixge/httpsnoop) package to capture response status codes, total processing time for each request and size of each responses.
+    2. updated the `metrics` middleware by adding the installed httpsnoop package.
