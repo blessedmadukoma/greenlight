@@ -409,3 +409,7 @@
   - **20.3:** Quality Controlling Code
     1. installed `staticcheck` tool (using `go install honnef.co/go/tools/cmd/staticcheck@latest`) to carry out static analysis checks
     2. added the `audit` command to perform analysis checks, and rearranged the `Makefile`
+  - **20.4:** Module Proxies and Vendoring
+    1. **Module proxies**: services which mirror source code from the original, authoritative repositories (i.e. those hosted on Github, Gitlab or Bitbucket). While, **Vendoring**: Vendoring dependencies basically stores a complete copy of the source code for third-party packages in a vendor folder in your project using the `go mod vendor` command.
+    2. updated Makefile to include `vendor` command, and using it as a prerequisite to run the `audit` command.
+    3. installed [realip](github.com/tomasen/realip@latest) to retrieve the client IP address from any X-FOrwarded-For or X-Real-IP headers, or falling back to use r.RemoteAddr if neither of them are present. Updated the `rateLimit` middleware to use the `realip` package.

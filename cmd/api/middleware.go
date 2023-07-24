@@ -4,7 +4,6 @@ import (
 	"errors"
 	"expvar"
 	"fmt"
-	"net"
 	"net/http"
 	"strconv"
 	"strings"
@@ -12,6 +11,7 @@ import (
 	"time"
 
 	"github.com/felixge/httpsnoop"
+	"github.com/tomasen/realip"
 
 	"github.com/blessedmadukoma/greenlight/internal/data"
 	"github.com/blessedmadukoma/greenlight/internal/validator"
@@ -65,12 +65,14 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// only carry out the rate limiting if enabled
 		if app.config.limiter.enabled {
-			ip, _, err := net.SplitHostPort(r.RemoteAddr)
+			// ip, _, err := net.SplitHostPort(r.RemoteAddr)
 
-			if err != nil {
-				app.serverErrorResponse(w, r, err)
-				return
-			}
+			// if err != nil {
+			// 	app.serverErrorResponse(w, r, err)
+			// 	return
+			// }
+
+			ip := realip.FromRequest(r)
 
 			// lock the mutex to prevent concurrent execution
 			mu.Lock()

@@ -43,10 +43,7 @@ db/migrations/down: confirm
 # QUALITY CONTROL
 # ========================================================================= #
 ## audit: tidy dependencies and	format code, vet and test all code
-audit:
-	@echo 'Tidying and verifying module dependencies...'
-	go mod tidy
-	go mod verify
+audit: vendor
 	@echo 'Formatting code...'
 	go fmt ./...
 	@echo 'Vetting code...'
@@ -55,4 +52,11 @@ audit:
 	@echo 'Running tests...'
 	go test -race -vet=off ./...
 
-.PHONY : audit help confirm run/api db/psql db/migrate/up db/migrate/down db/migration
+vendor:
+	@echo 'Tidying and verifying module dependencies...'
+	go mod tidy
+	go mod verify
+	@echo 'Vendoring dependencies...'
+	go mod vendor
+
+.PHONY : audit help vendor confirm run/api db/psql db/migrate/up db/migrate/down db/migration
