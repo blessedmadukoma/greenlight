@@ -404,3 +404,5 @@
     3. added a prerequisite command `confirm` to request for user input before running the migration up.
     4. added help information using `help`. This is the first rule in the Makefile because if you run `make` without any target, the first rule is the first command that will be executed.
     5. PHONY targets: not really the name of a file; rather it is just a name for a rule to be executed
+  - **20.2:** Managing Environment Variables
+    1. changed the default make commands to run with env variables
