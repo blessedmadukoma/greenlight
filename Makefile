@@ -1,3 +1,7 @@
+# ========================================================================= #
+# HELPERS
+# ========================================================================= #
+
 ## help: print this help message
 help:
 	@echo 'Usage:'
@@ -5,6 +9,10 @@ help:
 
 confirm:
 	@echo 'Are you sure? [y/N] ' && read ans && [ $${ans:-N} = y ]
+
+# ========================================================================= #
+# DEVELOPMENT
+# ========================================================================= #
 
 ## run/api: run the cmd/api application
 run/api:
@@ -31,4 +39,20 @@ db/migrations/down: confirm
 	@echo 'Running down migrations...'
 	migrate -path=./migrations -database "postgres://greenlight:greenlight@localhost/greenlight?sslmode=disable" -verbose down
 
-.PHONY : help confirm run/api db/psql db/migrate/up db/migrate/down db/migration
+# ========================================================================= #
+# QUALITY CONTROL
+# ========================================================================= #
+## audit: tidy dependencies and	format code, vet and test all code
+audit:
+	@echo 'Tidying and verifying module dependencies...'
+	go mod tidy
+	go mod verify
+	@echo 'Formatting code...'
+	go fmt ./...
+	@echo 'Vetting code...'
+	go vet ./...
+	staticcheck ./...
+	@echo 'Running tests...'
+	go test -race -vet=off ./...
+
+.PHONY : audit help confirm run/api db/psql db/migrate/up db/migrate/down db/migration

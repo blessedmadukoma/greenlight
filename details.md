@@ -406,3 +406,6 @@
     5. PHONY targets: not really the name of a file; rather it is just a name for a rule to be executed
   - **20.2:** Managing Environment Variables
     1. changed the default make commands to run with env variables
+  - **20.3:** Quality Controlling Code
+    1. installed `staticcheck` tool (using `go install honnef.co/go/tools/cmd/staticcheck@latest`) to carry out static analysis checks
+    2. added the `audit` command to perform analysis checks, and rearranged the `Makefile`
