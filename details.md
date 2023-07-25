@@ -419,3 +419,4 @@
     1. updated `main.go` to include a flag for displaying the version boolean flag with a default value of false.
     2. added build time which displays the build time used when displaying the version, updated the `build/api` command in the Makefile to 'burn in' the date time value into the build time variable and shortened the build flag using the `linker_flags` variable.
     3. Using git commit to automate the version numbering: removed the hard-coded string value for the `version` variable, added git_description shell command to the Makefile to retrieve the git commit.
+    4. Using Git tags to denote a formal release number: updated the Makefile to use git tags.
