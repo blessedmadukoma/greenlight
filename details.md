@@ -426,3 +426,12 @@
   - **21.3:** Deployment and Executing Migrations [**SKIPPED**]
   - **21.4:** Running the API as a Background Service [**SKIPPED**]
   - **21.5:** Using addy as a Reverse Proxy [**SKIPPED**]
+
+22. Appendices
+    
+    > learn how to: manage password resets, create additional activtion tokens, authenticate using JWTs, deal with JSON Encoding Nuances, deal with JSON Decoding Nuances and Request Content Timeouts.
+  - **22.1:** Managing Password Resets
+    1. added `ScopePasswordRest` constant and created the implementation for `createPasswordResetTokenHandler` to generate a password reset token and send to the user's email address.
+    2. created `updateUserPasswordHandler` to verify the password reset token and set a new password for the user.
+    3. created `token_password_reset.html` to contain the password reset instructions.
+    4. added the reset password routes to `routes.go`
