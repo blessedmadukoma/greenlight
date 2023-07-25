@@ -395,9 +395,6 @@
     1. go get [httpsnoop](github.com/felixge/httpsnoop) package to capture response status codes, total processing time for each request and size of each responses.
     2. updated the `metrics` middleware by adding the installed httpsnoop package.
 
-20. Building, Versioning and Quality Control
-    
-    > learn how to: use `Makefile` to automate tasks, perform quality control checks using `go vet` and `staticcheck` tools, vendor third-party packages incase they become unavailable in the future.
   - **20.1:** Creating and Using Makefiles
     1. installed the `make` utility using `brew install make`
     2. added `make run` and other commands, representing `go run ./cmd/api` to run the server
@@ -420,3 +417,12 @@
     2. added build time which displays the build time used when displaying the version, updated the `build/api` command in the Makefile to 'burn in' the date time value into the build time variable and shortened the build flag using the `linker_flags` variable.
     3. Using git commit to automate the version numbering: removed the hard-coded string value for the `version` variable, added git_description shell command to the Makefile to retrieve the git commit.
     4. Using Git tags to denote a formal release number: ran `git tag v1.0.0.0`, then updated the Makefile to use git tags, ran `make build/api` and `./bin/api -version`.
+
+21. Deployment and Hosting [**SKIPPED**]
+    
+    > learn how to: commission and Ubuntu Linux server running on Digital Ocean to host the application, automate the configuration server, automate the process of updating the application and deploying changes to the server, run application as a background service using `systemd`, as a non-root user and use `Caddy` as a reverse proxy in front of the application t automatically manage TLS certificates and handle HTTPS connections.
+  - **21.1:** Creating a Digital Ocean Droplet (or VM) [**SKIPPED**]
+  - **21.2:** Server Configuration and Installing Software [**SKIPPED**]
+  - **21.3:** Deployment and Executing Migrations [**SKIPPED**]
+  - **21.4:** Running the API as a Background Service [**SKIPPED**]
+  - **21.5:** Using addy as a Reverse Proxy [**SKIPPED**]
