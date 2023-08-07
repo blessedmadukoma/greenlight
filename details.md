@@ -435,3 +435,5 @@
     2. created `updateUserPasswordHandler` to verify the password reset token and set a new password for the user.
     3. created `token_password_reset.html` to contain the password reset instructions.
     4. added the reset password routes to `routes.go`
+  - **22.2:** Creating Additional Activation Tokens
+    1. 

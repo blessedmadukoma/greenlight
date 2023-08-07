@@ -36,7 +36,7 @@ db/migrations/up: confirm
 	migrate -path=./migrations -database ${GREENLIGHT_DB_DSN} -verbose up
 	@echo 'done...'
 
-## db/psql: apply all down database migrations
+## db/migrations/down: apply all down database migrations
 db/migrations/down: confirm
 	@echo 'Running down migrations...'
 	migrate -path=./migrations -database "postgres://greenlight:greenlight@localhost/greenlight?sslmode=disable" -verbose down
